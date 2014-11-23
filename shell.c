@@ -43,7 +43,15 @@ void cd (char* path) {
   //get current dir
   char cwd[1024];
   if (getcwd(cwd, sizeof(cwd)) != NULL) {
-    printf("%s", cwd);
+    if (path != cwd) {
+      printf ("Attempting to change directory\n");
+      if (chdir(path) == 0) {
+        printf ("Changed the directory\n");
+      }
+      else {
+        perror ("Can't change the directory. Check your path if it exits");
+      }
+    }
   }
   else {
     perror ("Can't get the current directory");
@@ -68,5 +76,7 @@ void backgroundProcess() {
 }
 
 int main() {
+  char* cwd = "/home/lynnt";
+  cd (cwd);
   return 0;
 }
