@@ -8,6 +8,7 @@
 #include <string.h>
 #include <unistd.h> //Get the linux commands
 #include <errno.h> //Return errors
+#include <sys/types.h>
 
 void parse(char* buffer, char** args, int argsSize, int *nargs) {
   //Parse args
@@ -61,8 +62,28 @@ void Exit() {
   //Exit the shell
   exit(0);
 }
-void executingProgram() {
+
+void executingProgram(const char* command, char* const argv[]) {
   //Executing other programs like ls/cd/etc..
+  pid_t childPID;
+  int* status;
+
+  childPID = fork();
+  if (childPID == 0) {
+    if (execvp(command, argv) < 0) {
+      perror ("Failed to execute the command");
+    }
+    else {
+      printf ("Executed the command");
+    }
+  }
+  else if (childPID > 0) {
+    waitpid(childPID, status, WNOHANG);
+  }
+  else {
+    perror ("Can't get to the child process");
+    exit(0);
+  }
 }
 
 void inputRedirection() {
@@ -80,6 +101,8 @@ void backgroundProcess() {
 
 int main() {
   char* cwd = "/home/lynnt";
-  cd (cwd);
+  char* command = "pwd";
+  char* args[] = {};
+  executingProgram(command, args);
   return 0;
 }
