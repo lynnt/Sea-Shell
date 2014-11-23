@@ -5,12 +5,12 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h> //Get the linux commands
 #include <errno.h> //Return errors
 
 void parse(char* buffer, char** args, int argsSize, int *nargs) {
   //Parse args
-  /*
   char* bufArgs[argsSize];
   char** cp;
   char* wbuf;
@@ -35,7 +35,6 @@ void parse(char* buffer, char** args, int argsSize, int *nargs) {
   //Add the NULL as the end argument because we need that later
   *nargs = j;
   args[j] = NULL;
-  */
 }
 
 void cd (char* path) {
@@ -58,6 +57,10 @@ void cd (char* path) {
   }
 }
 
+void Exit() {
+  //Exit the shell
+  exit(0);
+}
 void executingProgram() {
   //Executing other programs like ls/cd/etc..
 }
