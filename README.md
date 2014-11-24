@@ -7,7 +7,7 @@ This could execute programs, do some input/output redirection, and run some back
 
 **Build:**
 
-To make file
+To build file
   > make shell
 
 **Usage:**
