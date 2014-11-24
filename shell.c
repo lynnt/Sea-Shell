@@ -86,12 +86,41 @@ void executingProgram(const char* command, char* const argv[]) {
   }
 }
 
-void inputRedirection() {
+int inputRedirection(char* argv[], int length) {
   //Redirect the input/output when seeing the arrows
+  int i;
+  for (i = 0; i < length-1; i++) {
+    if (strcmp(argv[i], "<")) {
+      return i;
+    }
+  }
+  return -1;
 }
 
-void outputRedirection() {
+int outputRedirection(char* argv[], int length) {
   //Redirect the input/output when seeing the arrows
+  int i;
+  for (i = 0; i < length-1; i++) {
+    if (strcmp(argv[i], ">") == 0) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+void redirection(char* argv[], int length) {
+  FILE* file;
+  int output = outputRedirection(argv, length);
+  int input = inputRedirection(argv, length);
+
+  if (output != -1) {
+    file = freopen(argv[output+1], "w+", stdout);
+  }
+  else if (input != -1) {
+    file = freopen(argv[output+1], "w+", stdin);
+  }
+
+  fclose (file);
 }
 
 void backgroundProcess() {
@@ -101,8 +130,7 @@ void backgroundProcess() {
 
 int main() {
   char* cwd = "/home/lynnt";
-  char* command = "pwd";
-  char* args[] = {};
-  executingProgram(command, args);
+  char* args[] = {"ls", "-l", ">", "foo.txt"};
+  redirection(args, 4);
   return 0;
 }
