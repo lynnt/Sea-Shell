@@ -9,6 +9,8 @@
 #include <unistd.h> //Get the linux commands
 #include <errno.h> //Return errors
 #include <sys/types.h>
+#include <fcntl.h>
+#include <limits.h> //include PATH_MAX
 
 void parse(char* buffer, char** args, int argsSize, int *nargs) {
   //Parse args
@@ -58,7 +60,17 @@ void cd (char* path) {
   }
 }
 
-void Exit() {
+void getCurrentWorkingDirectory(){
+
+  char buffer[1024];
+  if (getcwd(buffer, sizeof(buffer)) == NULL){
+    perror("Can't get the current directory");
+  }
+  printf("%s\n", buffer);
+  exit(0);
+}
+
+void Exit(){
   //Exit the shell
   exit(0);
 }
@@ -66,7 +78,7 @@ void Exit() {
 void executingProgram(const char* command, char* const argv[]) {
   //Executing other programs like ls/cd/etc..
   pid_t childPID;
-  int* status;
+  int* status = NULL;
 
   childPID = fork();
   if (childPID == 0) {
@@ -109,18 +121,53 @@ int outputRedirection(char* argv[], int length) {
 }
 
 void redirection(char* argv[], int length) {
-  FILE* file;
+  int i, j;
   int output = outputRedirection(argv, length);
   int input = inputRedirection(argv, length);
+  char** newArgv = malloc(2 * sizeof(char*));
 
   if (output != -1) {
-    file = freopen(argv[output+1], "w+", stdout);
+    int fileDescriptor = open(argv[length-1], O_CREAT|O_TRUNC|O_WRONLY, 0644);
+    if (fileDescriptor < 0) {
+      perror(argv[length-1]);
+      exit(0);
+    }
+
+    //char* command = argv[0];
+    i = 1;
+    j = 0;
+    int newLength = 0;
+    //remove the args from the args array
+    while (strcmp(argv[i], ">") && j < length-1 && i < length-1) {
+      //    printf("%s\n", newArgv[0]);
+      //      memcpy(newArgv[j], argv[i], strlen(argv[i]) * sizeof(char));
+      //      strcpy(newArgv[j], argv[i]);
+      newLength++;
+      j++;
+      i++;
+    }
+
+    /*
+       for (i = 0; i < newLength; i++) {
+       printf("%d\n", newLength);
+       printf("==========================\n");
+       printf("%s\n", newArgv[i]);
+       }
+
+       char* args = {"ls", "-l"};
+    //redirect the stream & run the command
+    dup2(fileDescriptor, 1);
+    if (execvp(args[0], args) < 0) {
+    perror("Failed to execute the program");
+    exit(0);
+    }
+    */
   }
   else if (input != -1) {
-    file = freopen(argv[output+1], "w+", stdin);
+    //file = freopen(argv[output+1], "w+", stdin);
+    //TODO:use dup to redirect the stream
+    //remove the args from the args array
   }
-
-  fclose (file);
 }
 
 void backgroundProcess() {
@@ -128,8 +175,14 @@ void backgroundProcess() {
   //background command is being executed
 }
 
-int main() {
-  char* cwd = "/home/lynnt";
+int main(int argc, char** argv) {
+  //char* cwd = "/home/lynnt";
+  /*
+  //loop continously until 
+  while(true)) {
+    getCurrentWorkingDirectory();
+  }
+  */
   char* args[] = {"ls", "-l", ">", "foo.txt"};
   redirection(args, 4);
   return 0;
