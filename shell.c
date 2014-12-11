@@ -66,7 +66,7 @@ void getCurrentWorkingDirectory(){
   if (getcwd(buffer, sizeof(buffer)) == NULL){
     perror("Can't get the current directory");
   }
-  printf("%s\n", buffer);
+  printf("%s\t", buffer);
   exit(0);
 }
 
@@ -124,7 +124,7 @@ void redirection(char* argv[], int length) {
   int i, j;
   int output = outputRedirection(argv, length);
   int input = inputRedirection(argv, length);
-  char** newArgv = malloc(2 * sizeof(char*));
+  char* args[256];
 
   if (output != -1) {
     int fileDescriptor = open(argv[length-1], O_CREAT|O_TRUNC|O_WRONLY, 0644);
@@ -134,34 +134,25 @@ void redirection(char* argv[], int length) {
     }
 
     //char* command = argv[0];
-    i = 1;
-    j = 0;
+    i = 0;
     int newLength = 0;
     //remove the args from the args array
-    while (strcmp(argv[i], ">") && j < length-1 && i < length-1) {
-      //    printf("%s\n", newArgv[0]);
-      //      memcpy(newArgv[j], argv[i], strlen(argv[i]) * sizeof(char));
-      //      strcpy(newArgv[j], argv[i]);
+    while (strcmp(argv[i], ">") && i < length-1) {
+      args[i] = malloc(sizeof(char) * strlen(argv[i]));
+      strcpy(args[i], argv[i]);
       newLength++;
       j++;
       i++;
     }
 
-    /*
-       for (i = 0; i < newLength; i++) {
-       printf("%d\n", newLength);
-       printf("==========================\n");
-       printf("%s\n", newArgv[i]);
-       }
+    args[newLength] = NULL;
 
-       char* args = {"ls", "-l"};
     //redirect the stream & run the command
     dup2(fileDescriptor, 1);
-    if (execvp(args[0], args) < 0) {
-    perror("Failed to execute the program");
-    exit(0);
+    if (execvp(*args, args) < 0) {
+      perror("Failed to execute the program");
+      exit(0);
     }
-    */
   }
   else if (input != -1) {
     //file = freopen(argv[output+1], "w+", stdin);
@@ -176,14 +167,18 @@ void backgroundProcess() {
 }
 
 int main(int argc, char** argv) {
-  //char* cwd = "/home/lynnt";
   /*
-  //loop continously until 
+  //loop continously until
+  //char* cwd = malloc(sizeof(char));
+  //int* numberOfArgs = malloc(sizeof(int));
   while(true)) {
-    getCurrentWorkingDirectory();
+  getCurrentWorkingDirectory();
+  fgets(cwd, sizeof(cwd), stdin);
+  parse(cwd, argv, argc, nargs);
   }
   */
   char* args[] = {"ls", "-l", ">", "foo.txt"};
   redirection(args, 4);
+  //  free(cwd);
   return 0;
 }
