@@ -11,34 +11,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <limits.h> //include PATH_MAX
-
-void parse(char* buffer, char** args, int argsSize, int *nargs) {
-  //Parse args
-  char* bufArgs[argsSize];
-  char** cp;
-  char* wbuf;
-  int i, j;
-
-  wbuf = buffer;
-  bufArgs[0] = buffer;
-  args[0] = buffer;
-
-  for (cp = bufArgs; (*cp = strsep(&wbuf,"\n\t")) != NULL;) {
-    if ((*cp != '\0') && (++cp >= &bufArgs[argsSize])) {
-      break;
-    }
-  }
-
-  for (j = i = 0; bufArgs[i] != NULL; i++) {
-    if (strlen(bufArgs[i]) > 0) {
-      args[j++] = bufArgs[i];
-    }
-  }
-
-  //Add the NULL as the end argument because we need that later
-  *nargs = j;
-  args[j] = NULL;
-}
+#include "parser.c"
 
 void cd (char* path) {
   //Change directory using chdir
@@ -124,6 +97,7 @@ void redirection(char* argv[], int length) {
   int i, j;
   int output = outputRedirection(argv, length);
   int input = inputRedirection(argv, length);
+  int newLength = 0;
   char* args[256];
 
   if (output != -1) {
@@ -135,7 +109,6 @@ void redirection(char* argv[], int length) {
 
     //char* command = argv[0];
     i = 0;
-    int newLength = 0;
     //remove the args from the args array
     while (strcmp(argv[i], ">") && i < length-1) {
       args[i] = malloc(sizeof(char) * strlen(argv[i]));
@@ -150,14 +123,18 @@ void redirection(char* argv[], int length) {
     //redirect the stream & run the command
     dup2(fileDescriptor, 1);
     if (execvp(*args, args) < 0) {
+      for (i = 0; i < newLength; i++){
+        free(args[i]);
+      }
       perror("Failed to execute the program");
       exit(0);
     }
   }
   else if (input != -1) {
     //file = freopen(argv[output+1], "w+", stdin);
-    //TODO:use dup to redirect the stream
-    //remove the args from the args array
+  }
+  for (i = 0; i < newLength; i++){
+    free(args[i]);
   }
 }
 
@@ -167,16 +144,21 @@ void backgroundProcess() {
 }
 
 int main(int argc, char** argv) {
-  /*
   //loop continously until
   //char* cwd = malloc(sizeof(char));
   //int* numberOfArgs = malloc(sizeof(int));
-  while(true)) {
-  getCurrentWorkingDirectory();
-  fgets(cwd, sizeof(cwd), stdin);
-  parse(cwd, argv, argc, nargs);
-  }
-  */
+  /*
+     while(1) {
+     getCurrentWorkingDirectory();
+     fgets(cwd, sizeof(cwd), stdin);
+     parse(cwd, argv, argc, nargs);
+     if () {
+
+     }
+     else {
+     }
+     }
+     */
   char* args[] = {"ls", "-l", ">", "foo.txt"};
   redirection(args, 4);
   //  free(cwd);
