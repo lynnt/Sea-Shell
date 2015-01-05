@@ -1,6 +1,6 @@
 CC=gcc #C compiler
 CXX=g++ #C++ compiler
-CFLAGS=-g -Wall -pedantic -L/usr/local/lib -I/usr/local/include -lreadline
+CFLAGS=-g -Wall -pedantic
 
 all:
 

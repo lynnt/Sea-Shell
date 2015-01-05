@@ -7,17 +7,27 @@
 #include<stdlib.h>
 #include<string.h>
 #include<stdio.h>
-#include<readline/readline.h>
-#include<readline/history.h>
 
-void parserCommand(){
-
+void parseCommand(char str[]){
+  char* ptr = NULL;
+  ptr = strtok(str, " ");
+  while(ptr != NULL){
+    printf("%s\n", ptr);
+    ptr = strtok(NULL, " ");
+  }
 }
 
 int main () {
 
-  char* commandLine;
-  commandLine = readline("enter a string:  ");
+  char* commandLine = NULL;
+  int read;
+  size_t len;
+  read = getline(&commandLine, &len, stdin);
+
+  if(read != -1){
+    parseCommand(commandLine);
+  }
+
   if (commandLine != NULL)  {
     if (strcmp(commandLine, "exit")) {
       exit(0);
