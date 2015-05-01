@@ -24,7 +24,7 @@ char* parseCommand(char str[], char* commands[]){
       perror("Can't realloc");
     }
     ptr = strtok(NULL, " ");
-      printf("%d\n", index);
+    printf("%d\n", index);
     if(strcmp(ptr, "<") == 0){
       printf("Found");
       return "redirect";
@@ -33,8 +33,8 @@ char* parseCommand(char str[], char* commands[]){
   return NULL;
 }
 
+/*
 int main () {
-
   char* commandLine = NULL;
   char* commands[1024];
   int read;
@@ -55,3 +55,4 @@ int main () {
   }
   return 0;
 }
+*/

@@ -16,3 +16,4 @@ To build file
 
 **Current Task:**
 - Rewrite parser
+- Add unit tests

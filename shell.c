@@ -3,6 +3,7 @@
  * Copyright (c) Lynn Tran 2014
  * Description: This is a shell program
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,12 +35,12 @@ void cd (char* path) {
 }
 
 void getCurrentWorkingDirectory(){
-
-  char buffer[1024];
+  char buffer[PATH_MAX + 1];
   if (getcwd(buffer, sizeof(buffer)) == NULL){
     perror("Can't get the current directory");
+    return -1;
   }
-  printf("%s\t", buffer);
+  printf("%s ", buffer);
   exit(0);
 }
 
@@ -144,23 +145,18 @@ void backgroundProcess() {
 }
 
 int main(int argc, char** argv) {
-  //loop continously until
-  //char* cwd = malloc(sizeof(char));
-  //int* numberOfArgs = malloc(sizeof(int));
   /*
-     while(1) {
-     getCurrentWorkingDirectory();
-     fgets(cwd, sizeof(cwd), stdin);
-     parse(cwd, argv, argc, nargs);
-     if () {
-
-     }
-     else {
-     }
-     }
-     */
-  char* args[] = {"ls", "-l", ">", "foo.txt"};
-  redirection(args, 4);
-  //  free(cwd);
+   * loop continously until read in a termination symbol
+   */
+  char* cwd = malloc(sizeof(char));
+  //int* numberOfArgs = malloc(sizeof(int));
+  while(1){
+    getCurrentWorkingDirectory();
+    fgets(cwd, sizeof(cwd), stdin);
+    //    parse(cwd, argv, argc, nargs);
+  }
+  //  char* args[] = {"ls", "-l", ">", "foo.txt"};
+  //  redirection(args, 4);
+  free(cwd);
   return 0;
 }
