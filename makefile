@@ -2,9 +2,14 @@ CC=gcc #C compiler
 CXX=g++ #C++ compiler
 CFLAGS=-g -Wall -pedantic
 
-all:
+OBJECT = seashell.o
+NAME = seashell
 
-make:
+all: $(OBJECT)
+	$(CXX) $(CFLAGS) $(OBJECT) -o $(NAME)
 
+run:
+	./$(NAME)
+	
 clean:
 	rm foo.txt
