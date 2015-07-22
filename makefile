@@ -5,7 +5,7 @@ CFLAGS=-g -Wall -pedantic
 OBJECT = seashell.o
 NAME = seashell
 
-all: $(OBJECT)
+shell: $(OBJECT)
 	$(CXX) $(CFLAGS) $(OBJECT) -o $(NAME)
 
 run:
