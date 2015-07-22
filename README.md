@@ -9,6 +9,10 @@ This could execute programs, do some input/output redirection, and run some back
 
 To build file
   > make shell
+To run file
+  > make run
+To clean up
+  > make clean
 
 **Usage:**
 
