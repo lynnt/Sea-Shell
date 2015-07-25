@@ -5,15 +5,13 @@ A mini Linux shell.
 
 This could execute programs, do some input/output redirection, and run some background processes
 
-**Build:**
+### Build:
 
 To build file
   > make shell
   
-To clean up
-  > make clean
 
-**Usage:**
+### Usage:
 To run file
   > make run
   
