@@ -1,0 +1,3 @@
+TODO:
+* Add a struct for redirection (including direction flag)
+* Rewrite shell functions
