@@ -11,48 +11,14 @@
 
 #define MAX_LEN 1024
 char delimiters[] = {' ', '/'};
-typedef struct command {
-    char* str;
+typedef struct commands {
+    char str[MAX_LEN+1];
     int length;
-} command;
+} commands;
 
-char* parseCommand(char str[], char* commands[]){
-    char* curr = NULL;
-    curr = strtok(str, delimiters);
-    int index = 0;
-    /* iterate over the string until you find the null terminated string */
-    while(curr != NULL){
-        printf("%s\n", curr);
-        if(index < 1024){
-            commands[index] = curr;
-            index += strlen(curr);
-            printf("%s\n", commands[index]);
-            //printf("%d\n", index);
-            /*
-               if(strcmp(ptr, "<") == 0){
-               printf("Found");
-               return "redirect";
-               }
-               */
-        }
-        else{
-            //TODO: Realloc the array size
-            perror("Can't realloc");
-        }
-    }
-    return NULL;
-}
-
-char* parseCmd(char* str) {
-    char* curr = str;
-    // split by space
-    // split by delimiters
-    // check out if it's a command exists
-    while (*curr != NULL) {
-        printf("%c\n", *curr);
-        curr++;
-    }
-}
+typedef struct cmdline {
+    commands cmd;
+} cmdline;
 
 char* readLine(void) {
     char str[MAX_LEN + 1];
@@ -64,13 +30,59 @@ char* readLine(void) {
     return str;
 }
 
+int isBuiltinCommand(commands cmd) {
+    char* str = cmd.str;
+    if (strcmp(str, "cd")) {
+        return 1;
+    }
+    else if (strcmp(str, "pwd")) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+    return 0;
+}
+
+void parse(char* str, cmdline line) {
+    char* curr = str;
+    int index = 0;
+
+    /*
+     * Parse command
+     */
+
+    /* split by space */
+    curr = strtok(str, " ");
+
+    while (*curr) {
+        if (index < MAX_LEN) {
+            line.cmd.str[index] = *curr;
+            printf("%c\n", line.cmd.str[index]);
+            index += 1;
+        }
+        curr++;
+    }
+    line.cmd.str[index] = '\0';
+    line.cmd.length = index;
+
+    if (isBuiltinCommand(line.cmd) == 0) {
+        // split by delimiters
+    }
+}
+
 int main (int argc, char** argv) {
-    char* line;
+    /* Test cases:
+     * Get current dir: pwd
+     * Go to dir: cd
+     */
+    cmdline cmd;
+
     while (1) {
-        line = readLine();
+        char* line = readLine();
 
         if (line != NULL) {
-            parseCmd(line);
+            parse(line, cmd);
         }
     }
     return 0;
