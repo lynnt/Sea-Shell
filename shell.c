@@ -44,10 +44,6 @@ void getCurrentWorkingDirectory() {
   exit(0);
 }
 
-void Exit(){
-  exit(0);
-}
-
 void executingProgram(const char* command, char* const argv[]) {
   //Executing other programs like ls/cd/etc..
   pid_t childPID;
