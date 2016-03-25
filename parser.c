@@ -10,6 +10,7 @@
 #include<errno.h>
 
 #define MAX_LEN 1024
+#define ARG_NUM 4
 char delimiters[] = {' ', '/'};
 typedef struct commands {
     char str[MAX_LEN+1];
@@ -19,6 +20,8 @@ typedef struct commands {
 typedef struct cmdline {
     commands cmd;
 } cmdline;
+
+char* list[] = {"cd", "help", "exit", "pwd"};
 
 char* readLine(void) {
     char str[MAX_LEN + 1];
@@ -32,14 +35,14 @@ char* readLine(void) {
 
 int isBuiltinCommand(commands cmd) {
     char* str = cmd.str;
-    if (strcmp(str, "cd")) {
-        return 1;
-    }
-    else if (strcmp(str, "pwd")) {
-        return 1;
-    }
-    else {
-        return 0;
+    int i;
+    for (i = 0; i < ARG_NUM; ++i) {
+        if (strcmp(str, list[i])) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
     return 0;
 }
@@ -79,6 +82,7 @@ int main (int argc, char** argv) {
     cmdline cmd;
 
     while (1) {
+        //TODO: Write a prompt like an actual shell
         char* line = readLine();
 
         if (line != NULL) {
