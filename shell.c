@@ -34,7 +34,7 @@ void cd (char* path) {
   }
 }
 
-void getCurrentWorkingDirectory(){
+void getCurrentWorkingDirectory() {
   char buffer[PATH_MAX + 1];
   if (getcwd(buffer, sizeof(buffer)) == NULL){
     perror("Can't get the current directory");
@@ -45,7 +45,6 @@ void getCurrentWorkingDirectory(){
 }
 
 void Exit(){
-  //Exit the shell
   exit(0);
 }
 
