@@ -11,7 +11,10 @@
 
 #define MAX_LEN 1024
 #define ARG_NUM 4
-char delimiters[] = {' ', '/'};
+
+char* delimiters = {'>', '<', '&'};
+char* list[] = {"cd", "help", "exit", "pwd"};
+
 typedef struct commands {
     char str[MAX_LEN+1];
     int length;
@@ -20,8 +23,6 @@ typedef struct commands {
 typedef struct cmdline {
     commands cmd;
 } cmdline;
-
-char* list[] = {"cd", "help", "exit", "pwd"};
 
 char* readLine(void) {
     char str[MAX_LEN + 1];
@@ -55,7 +56,7 @@ void parse(char* str, cmdline line) {
      * Parse command
      */
 
-    /* split by space */
+    /* split words by space */
     curr = strtok(str, " ");
 
     while (*curr) {
@@ -70,7 +71,7 @@ void parse(char* str, cmdline line) {
     line.cmd.length = index;
 
     if (isBuiltinCommand(line.cmd) == 0) {
-        // split by delimiters
+        //TODO split by delimiters
     }
 }
 
