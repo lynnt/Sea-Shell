@@ -12,17 +12,23 @@
 #define MAX_LEN 1024
 #define ARG_NUM 4
 
-char* delimiters = {'>', '<', '&'};
+char delimiters[] = {'>', '<', '&'};
 char* list[] = {"cd", "help", "exit", "pwd"};
 
 typedef struct commands {
-    char str[MAX_LEN+1];
+    char* str;
     int length;
 } commands;
 
 typedef struct cmdline {
     commands cmd;
 } cmdline;
+
+typedef struct redirectCmd {
+    int dir; /* > or < */
+    commands cmd;
+    char* file;
+} redirectCmd;
 
 char* readLine(void) {
     char str[MAX_LEN + 1];
@@ -34,11 +40,10 @@ char* readLine(void) {
     return str;
 }
 
-int isBuiltinCommand(commands cmd) {
-    char* str = cmd.str;
+int isBuiltinCommand(const commands cmd) {
     int i;
     for (i = 0; i < ARG_NUM; ++i) {
-        if (strcmp(str, list[i])) {
+        if (strcmp(cmd.str, list[i])) {
             return 1;
         }
         else {
@@ -48,8 +53,10 @@ int isBuiltinCommand(commands cmd) {
     return 0;
 }
 
-void parse(char* str, cmdline line) {
-    char* curr = str;
+void parse(const char* str, cmdline line) {
+    //char* curr = str;
+    char* curr = (char*) malloc(MAX_LEN+1);
+    strcpy(curr, str);
     int index = 0;
 
     /*
@@ -57,21 +64,15 @@ void parse(char* str, cmdline line) {
      */
 
     /* split words by space */
-    curr = strtok(str, " ");
+    line.cmd.str = (char*) malloc(MAX_LEN+1);
+    curr = strtok(curr, " ");
+    strcpy(line.cmd.str, curr);
+    line.cmd.length = strlen(curr);
 
-    while (*curr) {
-        if (index < MAX_LEN) {
-            line.cmd.str[index] = *curr;
-            printf("%c\n", line.cmd.str[index]);
-            index += 1;
-        }
-        curr++;
-    }
-    line.cmd.str[index] = '\0';
-    line.cmd.length = index;
-
+    puts(str);
     if (isBuiltinCommand(line.cmd) == 0) {
-        //TODO split by delimiters
+        /* TODO split by delimiters */
+        curr = str+line.cmd.length+1;
     }
 }
 
