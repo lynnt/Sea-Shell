@@ -20,15 +20,16 @@ void errMsg(char* msg) {
 }
 
 void cd (char* path) {
-    /* Change directory using chdir */
     /* TODO: It's either PATH_MAX or not */
-
     char* cwd = (char*) malloc(MAX_LEN+1);
+
     /* get current dir */
     if (getcwd(cwd, sizeof(char) * (MAX_LEN+1)) != NULL) {
         if (strcmp(path, cwd) != 0) {
 
             printf ("Attempting to change directory\n");
+
+            /* Change directory */
             if (chdir(path) == 0) {
                 printf ("Changed the directory\n");
             }
@@ -52,7 +53,7 @@ void pwd() {
 }
 
 void executingProgram(const char* command, char* const argv[]) {
-    //Executing other programs like ls/cd/etc..
+    /* Executing other programs like ls/cd/etc.. */
     pid_t childPID;
     //TODO fix this status variable
     int* status = NULL;
@@ -63,14 +64,14 @@ void executingProgram(const char* command, char* const argv[]) {
             errMsg("Failed to execute the command");
         }
         else {
-            printf("Executed the command");
+            puts("Executed the command");
         }
     }
     else if (childPID > 0) {
         waitpid(childPID, status, WNOHANG);
     }
     else {
-        errMsg ("Can't get to the child process");
+        errMsg("Can't get to the child process");
     }
 }
 
