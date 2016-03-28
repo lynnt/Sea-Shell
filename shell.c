@@ -54,23 +54,23 @@ void pwd() {
 void executingProgram(const char* command, char* const argv[]) {
     //Executing other programs like ls/cd/etc..
     pid_t childPID;
+    //TODO fix this status variable
     int* status = NULL;
 
     childPID = fork();
     if (childPID == 0) {
         if (execvp(command, argv) < 0) {
-            perror ("Failed to execute the command");
+            errMsg("Failed to execute the command");
         }
         else {
-            printf ("Executed the command");
+            printf("Executed the command");
         }
     }
     else if (childPID > 0) {
         waitpid(childPID, status, WNOHANG);
     }
     else {
-        perror ("Can't get to the child process");
-        exit(0);
+        errMsg ("Can't get to the child process");
     }
 }
 
@@ -78,7 +78,7 @@ int inputRedirection(char* argv[], int length) {
     //Redirect the input/output when seeing the arrows
     int i;
     for (i = 0; i < length-1; i++) {
-        if (strcmp(argv[i], "<")) {
+        if (strcmp(argv[i], "<") == 0) {
             return i;
         }
     }
