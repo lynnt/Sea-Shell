@@ -31,13 +31,14 @@ typedef struct redirectCmd {
     char* file;
 } redirectCmd;
 
-char* readLine(void) {
-    char str[MAX_LEN + 1];
-    int ch, i = 0;
+char* readLine(char* str) {
+    int ch;
+    char* curr = str;
     while ((ch = getchar()) != '\n') {
-        str[i++] = ch;
+        *curr++ = ch;
     }
-    str[i] = '\0';
+    *curr = '\0';
+
     return str;
 }
 
@@ -64,7 +65,6 @@ int isBuiltinCommand(const commands cmd) {
 }
 
 void parse(const char* str, cmdline line) {
-    //char* curr = str;
     char* curr = (char*) malloc(MAX_LEN+1);
     strcpy(curr, str);
 
@@ -92,8 +92,9 @@ int main (int argc, char** argv) {
     cmdline cmd;
 
     while (1) {
-        //TODO: Write a prompt like an actual shell
-        char* line = readLine();
+        printf("~/SeaShell: ");
+        char* line = (char*) malloc(MAX_LEN+1);
+        line = readLine(line);
 
         if (line != NULL) {
             parse(line, cmd);
