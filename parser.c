@@ -8,6 +8,7 @@
 #include<string.h>
 #include<stdio.h>
 #include<errno.h>
+#include"shell.c"
 
 #define MAX_LEN 1024
 #define ARG_NUM 4
@@ -41,15 +42,24 @@ char* readLine(void) {
 }
 
 int isBuiltinCommand(const commands cmd) {
-    int i;
-    for (i = 0; i < ARG_NUM; ++i) {
-        if (strcmp(cmd.str, list[i])) {
-            return 1;
-        }
-        else {
-            return 0;
-        }
+    /* Command cd */
+    if (strcmp(cmd.str, list[0]) == 0) {
+        return 1;
     }
+    /* Command help */
+    else if (strcmp(cmd.str, list[1]) == 0) {
+        return 1;
+    }
+    /* Command exit */
+    else if (strcmp(cmd.str, list[2]) == 0) {
+        return 1;
+    }
+    /* Command pwd */
+    else if (strcmp(cmd.str, list[3]) == 0) {
+        pwd();
+        return 1;
+    }
+
     return 0;
 }
 
@@ -57,7 +67,6 @@ void parse(const char* str, cmdline line) {
     //char* curr = str;
     char* curr = (char*) malloc(MAX_LEN+1);
     strcpy(curr, str);
-    int index = 0;
 
     /*
      * Parse command
@@ -69,10 +78,9 @@ void parse(const char* str, cmdline line) {
     strcpy(line.cmd.str, curr);
     line.cmd.length = strlen(curr);
 
-    puts(str);
     if (isBuiltinCommand(line.cmd) == 0) {
-        /* TODO split by delimiters */
         curr = str+line.cmd.length+1;
+        /* TODO split by delimiters */
     }
 }
 
