@@ -54,7 +54,7 @@ int isBuiltinCommand(const commands cmd) {
     }
     /* Command exit */
     else if (strcmp(cmd.str, list[2]) == 0) {
-        return 1;
+        exit(0);
     }
     /* Command pwd */
     else if (strcmp(cmd.str, list[3]) == 0) {
