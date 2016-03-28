@@ -8,12 +8,12 @@
 #include<string.h>
 #include<stdio.h>
 #include<errno.h>
-#include"shell.c"
+#include"functionalities.c"
 
 #define MAX_LEN 1024
 #define ARG_NUM 4
 
-char delimiters[] = {'>', '<', '&'};
+char delimiters[] = {'>', '<', '&', '|'};
 char* list[] = {"cd", "help", "exit", "pwd"};
 
 typedef struct commands {
@@ -49,6 +49,7 @@ int isBuiltinCommand(const commands cmd) {
     }
     /* Command help */
     else if (strcmp(cmd.str, list[1]) == 0) {
+        help();
         return 1;
     }
     /* Command exit */
