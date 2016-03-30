@@ -31,6 +31,12 @@ typedef struct redirectCmd {
     char* file;
 } redirectCmd;
 
+typedef struct cdStruct {
+    commands cmd;
+} cdStruct;
+
+cdStruct cdCmd;
+
 char* readLine(char* str) {
     int ch;
     char* curr = str;
@@ -45,6 +51,7 @@ char* readLine(char* str) {
 int isBuiltinCommand(const commands cmd) {
     /* Command cd */
     if (strcmp(cmd.str, list[0]) == 0) {
+        cd(cdCmd.cmd.str);
         return 1;
     }
     /* Command help */
@@ -65,6 +72,16 @@ int isBuiltinCommand(const commands cmd) {
     return 0;
 }
 
+void parseChar(char* str) {
+    while (*str) {
+        /*
+        if (strcmp(*str, ' ') == 0) {
+            // store string depending on command//
+        }
+    */
+    }
+}
+
 void parse(const char* str, cmdline line) {
     char* curr = (char*) malloc(MAX_LEN+1);
     strcpy(curr, str);
@@ -79,9 +96,12 @@ void parse(const char* str, cmdline line) {
     strcpy(line.cmd.str, curr);
     line.cmd.length = strlen(curr);
 
+    /* update curr to start after the parsed word */
+    curr = str+line.cmd.length+1;
+    /* TODO split by delimiters */
+    parseChar(curr);
+
     if (isBuiltinCommand(line.cmd) == 0) {
-        curr = str+line.cmd.length+1;
-        /* TODO split by delimiters */
     }
 }
 
