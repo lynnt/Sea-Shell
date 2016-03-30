@@ -25,17 +25,12 @@ void cd (char* path) {
 
     /* get current dir */
     if (getcwd(cwd, sizeof(char) * (MAX_LEN+1)) != NULL) {
-        if (strcmp(path, cwd) != 0) {
-
-            printf ("Attempting to change directory\n");
-
-            /* Change directory */
-            if (chdir(path) == 0) {
-                printf ("Changed the directory\n");
-            }
-            else {
-                errMsg("Can't change the directory. Check your path if it exists");
-            }
+        // Change directory //
+        if (chdir(path) == 0) {
+            printf ("Changed the directory\n");
+        }
+        else {
+            errMsg("Can't change the directory. Check your path if it exists");
         }
     }
     else {
@@ -49,7 +44,7 @@ void pwd() {
         errMsg("Cant get the current directory");
     }
 
-    printf("%s ", buffer);
+    puts(buffer);
 }
 
 void executingProgram(const char* command, char* const argv[]) {
