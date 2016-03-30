@@ -14,27 +14,33 @@
 #include <limits.h> /* include PATH_MAX */
 #define MAX_LEN 1024
 
-void errMsg(char* msg) {
+void errAndExit(char* msg) {
     perror(msg);
     exit(-1);
+}
+
+void errMsg(char* msg) {
+    perror(msg);
+}
+
+void changePath(char* path) {
+    if (chdir(path) == 0) {
+        printf ("Changed the directory\n");
+    }
+    else {
+        errAndExit("Can't change the directory. Check your path if it exists");
+    }
 }
 
 void cd (char* path) {
     /* TODO: It's either PATH_MAX or not */
     char* cwd = (char*) malloc(MAX_LEN+1);
 
-    /* get current dir */
-    if (getcwd(cwd, sizeof(char) * (MAX_LEN+1)) != NULL) {
-        // Change directory //
-        if (chdir(path) == 0) {
-            printf ("Changed the directory\n");
-        }
-        else {
-            errMsg("Can't change the directory. Check your path if it exists");
-        }
+    if (path == NULL) {
+        errMsg("Currently not supported");
     }
     else {
-        errMsg("Can't get the current directory");
+        changePath(path);
     }
 }
 
@@ -56,7 +62,7 @@ void executingProgram(const char* command, char* const argv[]) {
     childPID = fork();
     if (childPID == 0) {
         if (execvp(command, argv) < 0) {
-            errMsg("Failed to execute the command");
+            errAndExit("Failed to execute the command");
         }
         else {
             puts("Executed the command");
@@ -66,7 +72,7 @@ void executingProgram(const char* command, char* const argv[]) {
         waitpid(childPID, status, WNOHANG);
     }
     else {
-        errMsg("Can't get to the child process");
+        errAndExit("Can't get to the child process");
     }
 }
 
