@@ -1,3 +1,4 @@
 TODO:
 * Rewrite shell functions
 * Print prompt like a real shell
+* Implement getEnvVar (use getenv)
