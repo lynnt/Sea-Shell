@@ -36,6 +36,7 @@ typedef struct cdStruct {
 } cdStruct;
 
 cdStruct cdCmd;
+redirectCmd redirect;
 
 char* readLine(char* str) {
     int ch;
@@ -73,12 +74,21 @@ int isBuiltinCommand(const commands cmd) {
 }
 
 void parseChar(char* str) {
-    while (*str) {
-        /*
-        if (strcmp(*str, ' ') == 0) {
-            // store string depending on command//
+    char* curr = str;
+
+    while (*curr) {
+        int index = 0;
+        while (*curr != NULL && strchr(curr, ' ')) {
+            curr++;
+            index++;
+        printf("==%s\n", curr);
         }
-    */
+
+        char* result = (char*) malloc(sizeof(char) * index);
+        strncpy(result, str, index);
+        printf("%s\n", result);
+
+        curr++;
     }
 }
 
