@@ -14,7 +14,7 @@
 #define ARG_NUM 4
 
 char delimiters[] = {'>', '<', '&', '|'};
-char* list[] = {"cd", "help", "exit", "pwd"};
+const char* list[] = {"cd", "help", "exit", "pwd"};
 
 typedef struct commands {
     char* str;
@@ -35,8 +35,14 @@ typedef struct cdStruct {
     commands cmd;
 } cdStruct;
 
+typedef struct execStruct {
+    commands cmd;
+    char** argv;
+} execStruct;
+
 cdStruct cdCmd;
 redirectCmd redirect;
+execStruct execCmd;
 
 char* readLine(char* str) {
     int ch;
@@ -78,7 +84,7 @@ void parseChar(char* str) {
 
     while (*curr) {
         int index = 0;
-        while (*curr != NULL && strchr(curr, ' ')) {
+        while (*curr && strchr(curr, ' ')) {
             curr++;
             index++;
         printf("==%s\n", curr);
@@ -92,7 +98,7 @@ void parseChar(char* str) {
     }
 }
 
-void parse(const char* str, cmdline line) {
+void parse(char* str, cmdline line) {
     char* curr = (char*) malloc(MAX_LEN+1);
     strcpy(curr, str);
 

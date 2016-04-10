@@ -1,14 +1,19 @@
 CC=gcc #C compiler
+CXX=g++ #C++ compiler
 CFLAGS=-g -Wall -pedantic
 
-OBJECT = seashell.o
-SRC = seashell.c
+NAME = seaShell
+OBJECT = $(NAME).o
+FILE = $(NAME).c
 
-shell: $(OBJECT)
-	$(CXX) $(CFLAGS) $(OBJECT) -o $(SRC)
+shell:
+	$(CC) $(CFLAGS) -o $(OBJECT) $(FILE)
+
+parser:
+	$(CC) $(CFLAGS) -o parser.o parser.c
 
 run:
-	./$(OBJECT)
+	./$(NAME)
 
 clean:
-	rm foo.txt && rm *.o
+	rm foo.txt

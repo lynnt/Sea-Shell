@@ -10,16 +10,17 @@
 #include <unistd.h> /* Get the linux commands */
 #include <errno.h> /* Return errors */
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <fcntl.h>
 #include <limits.h> /* include PATH_MAX */
 #define MAX_LEN 1024
 
-void errAndExit(char* msg) {
+void errAndExit(const char* msg) {
     perror(msg);
     exit(-1);
 }
 
-void errMsg(char* msg) {
+void errMsg(const char* msg) {
     perror(msg);
 }
 
@@ -33,9 +34,6 @@ void changePath(char* path) {
 }
 
 void cd (char* path) {
-    /* TODO: It's either PATH_MAX or not */
-    char* cwd = (char*) malloc(MAX_LEN+1);
-
     if (path == NULL) {
         errMsg("Currently not supported");
     }
@@ -53,11 +51,10 @@ void pwd() {
     puts(buffer);
 }
 
-void executingProgram(const char* command, char* const argv[]) {
+void executingProgram(const char* command, char** const argv) {
     /* Executing other programs like ls/cd/etc.. */
     pid_t childPID;
-    //TODO fix this status variable
-    int* status = NULL;
+    int status;
 
     childPID = fork();
     if (childPID == 0) {
@@ -69,15 +66,16 @@ void executingProgram(const char* command, char* const argv[]) {
         }
     }
     else if (childPID > 0) {
-        waitpid(childPID, status, WNOHANG);
+        waitpid(childPID, &status, WNOHANG);
     }
     else {
         errAndExit("Can't get to the child process");
     }
 }
 
+/* TODO: Delete this */
 int inputRedirection(char* argv[], int length) {
-    //Redirect the input/output when seeing the arrows
+    /* Redirect the input/output when seeing the arrows */
     int i;
     for (i = 0; i < length-1; i++) {
         if (strcmp(argv[i], "<") == 0) {
@@ -87,8 +85,9 @@ int inputRedirection(char* argv[], int length) {
     return -1;
 }
 
+/* TODO: Delete this */
 int outputRedirection(char* argv[], int length) {
-    //Redirect the input/output when seeing the arrows
+    /* Redirect the input/output when seeing the arrows */
     int i;
     for (i = 0; i < length-1; i++) {
         if (strcmp(argv[i], ">") == 0) {
@@ -99,6 +98,7 @@ int outputRedirection(char* argv[], int length) {
 }
 
 void redirection(char* argv[], int length) {
+    /*
     int i, j;
     int output = outputRedirection(argv, length);
     int input = inputRedirection(argv, length);
@@ -141,11 +141,11 @@ void redirection(char* argv[], int length) {
     for (i = 0; i < newLength; i++){
         free(args[i]);
     }
+    */
 }
 
 void backgroundProcess() {
-    //Run programs in the background with a '&' at the end of the command while the
-    //background command is being executed
+    /* Run programs in the background with a '&' at the end of the command while the background command is being executed */
 }
 
 /* TODO */
