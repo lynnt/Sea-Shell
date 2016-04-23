@@ -75,30 +75,6 @@ void executingProgram(const char* command, char** const argv) {
     }
 }
 
-/* TODO: Delete this */
-int inputRedirection(char* argv[], int length) {
-    /* Redirect the input/output when seeing the arrows */
-    int i;
-    for (i = 0; i < length-1; i++) {
-        if (strcmp(argv[i], "<") == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-/* TODO: Delete this */
-int outputRedirection(char* argv[], int length) {
-    /* Redirect the input/output when seeing the arrows */
-    int i;
-    for (i = 0; i < length-1; i++) {
-        if (strcmp(argv[i], ">") == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 void redirection(char* file, int direction, int length) {
     if (file) {
         errMsg("There is no file");
