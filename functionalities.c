@@ -3,7 +3,6 @@
  * Copyright (c) Lynn Tran 2014
  * Description: This is a shell program
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,7 +12,10 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <limits.h> /* include PATH_MAX */
+
 #define MAX_LEN 1024
+#define LEFT 1
+#define RIGHT 2
 
 void errAndExit(const char* msg) {
     perror(msg);
@@ -97,55 +99,39 @@ int outputRedirection(char* argv[], int length) {
     return -1;
 }
 
-void redirection(char* argv[], int length) {
-    /*
-    int i, j;
-    int output = outputRedirection(argv, length);
-    int input = inputRedirection(argv, length);
-    int newLength = 0;
-    char* args[256];
+void redirection(char* file, int direction, int length) {
+    if (file) {
+        errMsg("There is no file");
+        return;
+    }
 
-    if (output != -1) {
-        int fileDescriptor = open(argv[length-1], O_CREAT|O_TRUNC|O_WRONLY, 0644);
-        if (fileDescriptor < 0) {
-            perror(argv[length-1]);
-            exit(0);
+    if (direction == LEFT) {
+        int fileDescriptor = open(file, O_CREAT|O_TRUNC|O_WRONLY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+        /* execute the command */
+    }
+    else if (direction == RIGHT) {
+        int fileDescriptor = open(file, O_CREAT|O_TRUNC|O_WRONLY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+
+        if (fileDescriptor == -1) {
+            errMsg("Can't open output file " + *file);
+            return;
         }
 
-        //char* command = argv[0];
-        i = 0;
-        //remove the args from the args array
-        while (strcmp(argv[i], ">") && i < length-1) {
-            args[i] = malloc(sizeof(char) * strlen(argv[i]));
-            strcpy(args[i], argv[i]);
-            newLength++;
-            j++;
-            i++;
+        /* redirect the stream to the file. Value 1 in 2nd argument is new
+         * file descriptor */
+        if (dup2(fileDescriptor, 1) < 0) {
+            errMsg("Can't redirect into file" + *file);
+            return;
         }
 
-        args[newLength] = NULL;
-
-        //redirect the stream & run the command
-        dup2(fileDescriptor, 1);
-        if (execvp(*args, args) < 0) {
-            for (i = 0; i < newLength; i++){
-                free(args[i]);
-            }
-            perror("Failed to execute the program");
-            exit(0);
-        }
+        /* execute the command */
     }
-    else if (input != -1) {
-        //file = freopen(argv[output+1], "w+", stdin);
-    }
-    for (i = 0; i < newLength; i++){
-        free(args[i]);
-    }
-    */
 }
 
+/*
+ * Run programs in the background with a '&' at the end of the command while the background command is being executed
+ * */
 void backgroundProcess() {
-    /* Run programs in the background with a '&' at the end of the command while the background command is being executed */
 }
 
 /* TODO */
