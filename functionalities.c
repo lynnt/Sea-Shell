@@ -107,6 +107,18 @@ void redirection(char* file, int direction, int length) {
 
     if (direction == LEFT) {
         int fileDescriptor = open(file, O_CREAT|O_TRUNC|O_WRONLY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+
+        if (fileDescriptor == -1) {
+            errMsg("Can't open output file " + *file);
+            return;
+        }
+
+        /* redirect the stream */
+        if (dup2(fileDescriptor, STDIN_FILENO) < 0) {
+            errMsg("Can't redirect into file" + *file);
+            return;
+        }
+
         /* execute the command */
     }
     else if (direction == RIGHT) {
@@ -117,9 +129,8 @@ void redirection(char* file, int direction, int length) {
             return;
         }
 
-        /* redirect the stream to the file. Value 1 in 2nd argument is new
-         * file descriptor */
-        if (dup2(fileDescriptor, 1) < 0) {
+        /* redirect the stream */
+        if (dup2(fileDescriptor, STDOUT_FILENO) < 0) {
             errMsg("Can't redirect into file" + *file);
             return;
         }
