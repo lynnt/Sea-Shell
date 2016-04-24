@@ -10,42 +10,7 @@
 #include<errno.h>
 #include<ctype.h>
 #include"functionalities.c"
-
-#define MAX_LEN 1024
-#define ARG_NUM 4
-#define LEFT 1
-#define RIGHT 2
-
-char delimiters[] = {'>', '<', '&', '|'};
-const char* list[] = {"cd", "help", "exit", "pwd"};
-
-typedef struct commands {
-    char* str;
-    int length;
-} commands;
-
-typedef struct cmdline {
-    commands cmd;
-} cmdline;
-
-typedef struct redirectCmd {
-    int dir;
-    commands cmd;
-    char* file;
-} redirectCmd;
-
-typedef struct cdStruct {
-    commands cmd;
-} cdStruct;
-
-typedef struct execStruct {
-    commands cmd;
-    char** argv;
-} execStruct;
-
-cdStruct cdCmd;
-redirectCmd redirect;
-execStruct execCmd;
+#include"parser.h"
 
 char* readLine(char* str) {
     int ch;
@@ -61,6 +26,7 @@ char* readLine(char* str) {
 int isBuiltinCommand(const commands cmd) {
     /* Command cd */
     if (strcmp(cmd.str, list[0]) == 0) {
+        cdStruct cdCmd;
         cd(cdCmd.cmd.str);
         return 1;
     }
@@ -82,80 +48,86 @@ int isBuiltinCommand(const commands cmd) {
     return 0;
 }
 
-void parseCommand(char* str) {
-    char* curr = str;
-    int index = 0;
+void clearBuffer(char* word, int pos) {
+    memset(word, 0, sizeof(word));
+}
 
-    while (*curr) {
-        while (*curr && isspace(*curr)) {
-            curr++;
-        }
-
-        if (index > 0) {
-            char* word = (char*) malloc(sizeof(char) * index);
-        }
-
-        /* Right redirection*/
-        if (*curr == delimiters[0]) {
-            redirect.dir = RIGHT;
-            index = 0;
-        }
-        /* Left redirection*/
-        else if (*curr == delimiters[1]) {
-            redirect.dir = LEFT;
-            index = 0;
-        }
-        /* Background jobs */
-        else if (*curr == delimiters[2]) {
-        }
-        /* Pipes */
-        else if (*curr == delimiters[3]) {
-        }
-        /* accumulate command */
-        else {
-        }
-
-        /*
-        int index = 0;
-        while (*curr && strchr(curr, ' ')) {
-            curr++;
-            index++;
-
-            printf("==%s\n", curr);
-            char* result = (char*) malloc(sizeof(char) * index);
-            printf("-=-%s    %d\n", str, index);
-            strncpy(result, str, index);
-            printf("---%s\n", result);
-            printf("%s\n", curr);
-        }
-        */
-        curr++;
+void insertNewArg(commands* cmd, char* word) {
+    if (word) {
+        cmd->str = word;
+        cmd->length = strlen(word);
     }
 }
 
-/*
- * Parse token based on delimiters. If delimiter is seen, the text will
- * be stored in struct appropriately
- */
-void parse(char* str, cmdline line) {
-    char* curr = (char*) malloc(MAX_LEN+1);
+void parseArg(char* str, cmdline *cmd) {
+    char *curr = (char*) malloc(MAX_LEN+1);
     strcpy(curr, str);
+    int index = 0;
+    int found = 0;
+    int pos = 0;
+    char* word = (char*) malloc(MAX_LEN+1);
 
-    /*
-     * Parse command
-     */
+    while (*curr) {
+        if (index > MAX_COMMANDS) {
+            errAndExit("Exceed the max number of arguments");
+        }
 
-    /* split words by space */
-    line.cmd.str = (char*) malloc(MAX_LEN+1);
-    curr = strtok(curr, " ");
-    strcpy(line.cmd.str, curr);
-    line.cmd.length = strlen(curr);
+        /* skip white space */
+        while (*curr && isspace(*curr)) {
+            if (found == 0) {
+                commands command;
+                cmd->cmd[index] = command;
+                cmd->length++;
+                insertNewArg(&command, word);
 
-    /* update curr to start after the parsed word */
-    curr = str+line.cmd.length;
-    parseCommand(curr);
+                clearBuffer(word, pos);
+                pos = 0;
+            }
+            found = 1;
+            curr++;
+        }
+        found = 0;
 
-    if (isBuiltinCommand(line.cmd) == 0) {
-        /* executingProgram(); */
+        switch (*curr) {
+            case '|':
+            case '<':
+            case '>':
+                {
+                    commands command;
+                    cmd->cmd[index] = command;
+                    cmd->length++;
+                    insertNewArg(&command, word);
+                    curr++;
+                    clearBuffer(word, pos);
+                    pos = 0;
+                    break;
+                }
+            default:
+                {
+                    word[pos] = *curr;
+                    pos++;
+                    curr++;
+                    break;
+                }
+        }
+    }
+
+    if (word)  {
+        printf("%s\n", word);
+        commands command;
+        cmd->cmd[index] = command;
+        cmd->length++;
+        insertNewArg(&command, word);
+    }
+    free(word);
+}
+
+void parse(char* str) {
+    cmdline cmd;
+    parseArg(str, &cmd);
+
+    int i;
+    for (i = 0; i < cmd.length; i++) {
+        printf("%s\n", cmd.cmd[i].str);
     }
 }

@@ -12,7 +12,7 @@ shell:
 parser:
 	$(CC) $(CFLAGS) -o parser.o parser.c
 
-run:
+run: $(OBJ)
 	./$(OBJ)
 
 clean:

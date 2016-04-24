@@ -15,15 +15,13 @@ int main (int argc, char** argv) {
      * Redirection:
      * ls -ls > foo.txx
      */
-    cmdline cmd;
-
     while (1) {
         printf("~/SeaShell: ");
         char* line = (char*) malloc(MAX_LEN+1);
         line = readLine(line);
 
         if (line != NULL) {
-            parse(line, cmd);
+            parse(line);
         }
     }
     return 0;
