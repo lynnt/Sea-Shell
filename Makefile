@@ -3,17 +3,17 @@ CXX=g++ #C++ compiler
 CFLAGS=-g -Wall -pedantic
 
 NAME = seashell
-OBJECT = $(NAME).o
+OBJ = $(NAME).o
 FILE = $(NAME).c
 
 shell:
-	$(CC) $(CFLAGS) -o $(OBJECT) $(FILE)
+	$(CC) $(CFLAGS) -o $(OBJ) $(FILE)
 
 parser:
 	$(CC) $(CFLAGS) -o parser.o parser.c
 
 run:
-	./$(NAME)
+	./$(OBJ)
 
 clean:
 	rm *.o

@@ -48,6 +48,7 @@ void pwd() {
     char* buffer = (char*) malloc(MAX_LEN+1);
     if (getcwd(buffer, sizeof(char) * (MAX_LEN+1)) == NULL){
         errMsg("Cant get the current directory");
+        return;
     }
 
     puts(buffer);
@@ -75,7 +76,7 @@ void executingProgram(const char* command, char** const argv) {
     }
 }
 
-void redirection(char* file, int direction, int length) {
+void redirection(char* file, int direction, char** argv) {
     if (file) {
         errMsg("There is no file");
         return;
@@ -96,9 +97,11 @@ void redirection(char* file, int direction, int length) {
         }
 
         /* execute the command */
+
+        close(fileDescriptor);
     }
     else if (direction == RIGHT) {
-        int fileDescriptor = open(file, O_CREAT|O_TRUNC|O_WRONLY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+        int fileDescriptor = creat(file, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
 
         if (fileDescriptor == -1) {
             errMsg("Can't open output file " + *file);
@@ -112,6 +115,8 @@ void redirection(char* file, int direction, int length) {
         }
 
         /* execute the command */
+
+        close(fileDescriptor);
     }
 }
 
