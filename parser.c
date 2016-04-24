@@ -1,6 +1,6 @@
 /*
  * lynn tran
- * Copyright (c) Lynn Tran 2014
+ * Copyright (c) Lynn Tran 2014-2016
  * Description: Parser for shell program
  */
 
