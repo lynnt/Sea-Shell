@@ -123,20 +123,3 @@ void backgroundProcess() {
 
 /* TODO */
 void help() {}
-
-/*
-int main(int argc, char** argv) {
-     * loop continously until read in a termination symbol
-    char* cwd = malloc(sizeof(char));
-    //int* numberOfArgs = malloc(sizeof(int));
-    while(1){
-        getCurrentWorkingDirectory();
-        fgets(cwd, sizeof(cwd), stdin);
-        //    parse(cwd, argv, argc, nargs);
-    }
-    //  char* args[] = {"ls", "-l", ">", "foo.txt"};
-    //  redirection(args, 4);
-    free(cwd);
-    return 0;
-}
-*/

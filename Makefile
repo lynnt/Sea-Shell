@@ -2,7 +2,7 @@ CC=gcc #C compiler
 CXX=g++ #C++ compiler
 CFLAGS=-g -Wall -pedantic
 
-NAME = seaShell
+NAME = seashell
 OBJECT = $(NAME).o
 FILE = $(NAME).c
 
@@ -16,4 +16,4 @@ run:
 	./$(NAME)
 
 clean:
-	rm foo.txt
+	rm *.o

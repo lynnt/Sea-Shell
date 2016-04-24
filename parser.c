@@ -159,22 +159,3 @@ void parse(char* str, cmdline line) {
     if (isBuiltinCommand(line.cmd) == 0) {
     }
 }
-
-int main (int argc, char** argv) {
-    /* Test cases:
-     * Get current dir: pwd
-     * Go to dir: cd
-     */
-    cmdline cmd;
-
-    while (1) {
-        printf("~/SeaShell: ");
-        char* line = (char*) malloc(MAX_LEN+1);
-        line = readLine(line);
-
-        if (line != NULL) {
-            parse(line, cmd);
-        }
-    }
-    return 0;
-}
