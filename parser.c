@@ -153,9 +153,9 @@ void parse(char* str, cmdline line) {
 
     /* update curr to start after the parsed word */
     curr = str+line.cmd.length;
-    /* TODO split by delimiters */
     parseCommand(curr);
 
     if (isBuiltinCommand(line.cmd) == 0) {
+        /* executingProgram(); */
     }
 }

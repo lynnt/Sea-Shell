@@ -124,6 +124,7 @@ void redirection(char* file, int direction, char** argv) {
  * Run programs in the background with a '&' at the end of the command while the background command is being executed
  * */
 void backgroundProcess() {
+    /* TODO: waitpid(pid, status, options) */
 }
 
 /* TODO */
