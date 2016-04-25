@@ -12,6 +12,9 @@
 #include"functionalities.c"
 #include"parser.h"
 
+/*
+ * Read an input line of command
+ */
 char* readLine(char* str) {
     int ch;
     char* curr = str;
@@ -48,23 +51,34 @@ int isBuiltinCommand(const commands cmd) {
     return 0;
 }
 
-void clearBuffer(char* word, int pos) {
-    memset(word, 0, sizeof(word));
+/*
+ * Clear out the word buffer when seeing a delimiter
+ */
+void clearWordBuffer(char* word, int pos) {
+    memset(word, 0, sizeof(char) * (pos-1));
 }
 
-void insertNewArg(commands* cmd, char* word) {
-    if (word) {
-        cmd->str = word;
-        cmd->length = strlen(word);
+void insertNewArg(commands* cmd, char* word, int pos) {
+    if (*word) {
+        cmd->str = (char*) malloc(pos+1);
+        memcpy(cmd->str, word, pos);
+        cmd->length = pos;
+        /*
+        fwrite(cmd->str, sizeof(char), pos, stdout);
+        printf("\n");
+        */
     }
 }
 
+/*
+ * Parse an argument from a line of commands.
+ */
 void parseArg(char* str, cmdline *cmd) {
     char *curr = (char*) malloc(MAX_LEN+1);
     strcpy(curr, str);
-    int index = 0;
-    int found = 0;
-    int pos = 0;
+    unsigned int index = 0;
+    unsigned int found = 0;
+    unsigned int pos = 0;
     char* word = (char*) malloc(MAX_LEN+1);
 
     while (*curr) {
@@ -74,16 +88,18 @@ void parseArg(char* str, cmdline *cmd) {
 
         /* skip white space */
         while (*curr && isspace(*curr)) {
-            if (found == 0) {
+            if (found == 0 && word) {
                 commands command;
+                insertNewArg(&command, word, pos);
+
                 cmd->cmd[index] = command;
                 cmd->length++;
-                insertNewArg(&command, word);
+                index++;
 
-                clearBuffer(word, pos);
+                clearWordBuffer(word, pos);
                 pos = 0;
+                found = 1;
             }
-            found = 1;
             curr++;
         }
         found = 0;
@@ -94,11 +110,13 @@ void parseArg(char* str, cmdline *cmd) {
             case '>':
                 {
                     commands command;
+                    insertNewArg(&command, word, pos);
                     cmd->cmd[index] = command;
                     cmd->length++;
-                    insertNewArg(&command, word);
+
                     curr++;
-                    clearBuffer(word, pos);
+                    index++;
+                    clearWordBuffer(word, pos);
                     pos = 0;
                     break;
                 }
@@ -113,11 +131,12 @@ void parseArg(char* str, cmdline *cmd) {
     }
 
     if (word)  {
-        printf("%s\n", word);
+        printf("TEST\n");
         commands command;
+        insertNewArg(&command, word, pos);
         cmd->cmd[index] = command;
         cmd->length++;
-        insertNewArg(&command, word);
+        index++;
     }
     free(word);
 }
@@ -125,9 +144,4 @@ void parseArg(char* str, cmdline *cmd) {
 void parse(char* str) {
     cmdline cmd;
     parseArg(str, &cmd);
-
-    int i;
-    for (i = 0; i < cmd.length; i++) {
-        printf("%s\n", cmd.cmd[i].str);
-    }
 }

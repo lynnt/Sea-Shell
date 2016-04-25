@@ -9,7 +9,6 @@
 #define RIGHT 2
 #define MAX_COMMANDS 100
 
-
 char delimiters[] = {'>', '<', '&', '|'};
 const char* list[] = {"cd", "help", "exit", "pwd"};
 
@@ -37,3 +36,10 @@ typedef struct execStruct {
     commands cmd;
     char** argv;
 } execStruct;
+
+char* readLine(char *str);
+int isBuiltinCommand(const commands cmd);
+void clearBuffer(char *word, int pos);
+void insertNewArg(commands *cmd, char *word, int pos);
+void parseArg(char *str, cmdline *cmd);
+void parse(char *str);
