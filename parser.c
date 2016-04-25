@@ -4,9 +4,10 @@
  * Description: Parser for shell program
  */
 
+#include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<stdio.h>
+#include<assert.h>
 #include<errno.h>
 #include<ctype.h>
 #include"functionalities.c"
@@ -26,24 +27,23 @@ char* readLine(char* str) {
     return str;
 }
 
-int isBuiltinCommand(const commands cmd) {
+int isBuiltinCommand(commands* cmd) {
     /* Command cd */
-    if (strcmp(cmd.str, list[0]) == 0) {
-        cdStruct cdCmd;
-        cd(cdCmd.cmd.str);
+    if (strcmp(cmd->str, list[0]) == 0) {
+        cd(cmd->str);
         return 1;
     }
     /* Command help */
-    else if (strcmp(cmd.str, list[1]) == 0) {
+    else if (strcmp(cmd->str, list[1]) == 0) {
         help();
         return 1;
     }
     /* Command exit */
-    else if (strcmp(cmd.str, list[2]) == 0) {
+    else if (strcmp(cmd->str, list[2]) == 0) {
         exit(0);
     }
     /* Command pwd */
-    else if (strcmp(cmd.str, list[3]) == 0) {
+    else if (strcmp(cmd->str, list[3]) == 0) {
         pwd();
         return 1;
     }
@@ -148,4 +148,7 @@ void parseArg(char* str, cmdline *cmd) {
 void parse(char* str) {
     cmdline cmd;
     parseArg(str, &cmd);
+
+    if (isBuiltinCommand(&cmd.cmd[0]) == 0) {
+    }
 }

@@ -1,7 +1,7 @@
 /*
  * Lynn Tran (c) 2016
  */
-#include <stdio.h>
+#include<stdio.h>
 
 #define MAX_LEN 1024
 #define ARG_NUM 4
@@ -38,8 +38,8 @@ typedef struct execStruct {
 } execStruct;
 
 char* readLine(char *str);
-int isBuiltinCommand(const commands cmd);
-void clearBuffer(char *word, int pos);
+int isBuiltinCommand(commands *cmd);
+void clearWordBuffer(char *word, int pos);
 void insertNewArg(commands *cmd, char *word, int pos);
 void parseArg(char *str, cmdline *cmd);
 void parse(char *str);

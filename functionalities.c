@@ -26,24 +26,6 @@ void errMsg(const char* msg) {
     perror(msg);
 }
 
-void changePath(char* path) {
-    if (chdir(path) == 0) {
-        printf ("Changed the directory\n");
-    }
-    else {
-        errAndExit("Can't change the directory. Check your path if it exists");
-    }
-}
-
-void cd (char* path) {
-    if (path == NULL) {
-        errMsg("Currently not supported");
-    }
-    else {
-        changePath(path);
-    }
-}
-
 void pwd() {
     char* buffer = (char*) malloc(MAX_LEN+1);
     if (getcwd(buffer, sizeof(char) * (MAX_LEN+1)) == NULL){
@@ -52,6 +34,26 @@ void pwd() {
     }
 
     puts(buffer);
+}
+
+void changePath(char* path) {
+    if (chdir(path) == 0) {
+        pwd();
+    }
+    else {
+        errMsg("Can't change the directory. Check your path if it exists");
+        return;
+    }
+}
+
+void cd(char* path) {
+    if (*path) {
+        errMsg("Currently not supported");
+        return;
+    }
+    else {
+        changePath(path);
+    }
 }
 
 void executingProgram(const char* command, char** const argv) {
