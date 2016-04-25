@@ -27,7 +27,7 @@ char* readLine(char* str) {
     return str;
 }
 
-int isBuiltinCommand(commands* cmd) {
+int isBuiltinCommand(NonTerminatedString* cmd) {
     /* Command cd */
     if (strcmp(cmd->str, list[0]) == 0) {
         cd(cmd->str);
@@ -61,7 +61,7 @@ void clearWordBuffer(char* word, int pos) {
 /*
  * Add a new argument into the list of args
  */
-void insertNewArg(commands* cmd, char* word, int pos) {
+void insertNewArg(NonTerminatedString* cmd, char* word, int pos) {
     assert(*word);
     cmd->str = (char*) malloc(pos+1);
     memcpy(cmd->str, word, pos);
@@ -89,7 +89,7 @@ void parseArg(char* str, cmdline *cmd) {
         /* skip white space */
         while (*curr && isspace(*curr)) {
             if (found == 0 && word) {
-                commands command;
+                NonTerminatedString command;
                 insertNewArg(&command, word, pos);
 
                 cmd->cmd[index] = command;
@@ -104,12 +104,15 @@ void parseArg(char* str, cmdline *cmd) {
         }
         found = 0;
 
+        /* If it's delimiter, clear up word buffer and add to list of args,
+         * else continue to read in character to form a word
+         */
         switch (*curr) {
             case '|':
             case '<':
             case '>':
                 {
-                    commands command;
+                    NonTerminatedString command;
                     insertNewArg(&command, word, pos);
                     cmd->cmd[index] = command;
                     cmd->length++;
@@ -131,7 +134,7 @@ void parseArg(char* str, cmdline *cmd) {
     }
 
     if (*word)  {
-        commands command;
+        NonTerminatedString command;
         insertNewArg(&command, word, pos);
 
         cmd->cmd[index] = command;

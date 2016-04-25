@@ -12,34 +12,34 @@
 char delimiters[] = {'>', '<', '&', '|'};
 const char* list[] = {"cd", "help", "exit", "pwd"};
 
-typedef struct commands {
+typedef struct NonTerminatedString {
     char* str;
     int length;
-} commands;
+} NonTerminatedString;
 
 typedef struct cmdline {
-    commands cmd[MAX_COMMANDS];
+    NonTerminatedString cmd[MAX_COMMANDS];
     int length;
 } cmdline;
 
 typedef struct redirectCmd {
     int dir;
-    commands cmd;
+    NonTerminatedString cmd;
     char* file;
 } redirectCmd;
 
 typedef struct cdStruct {
-    commands cmd;
+    NonTerminatedString cmd;
 } cdStruct;
 
 typedef struct execStruct {
-    commands cmd;
+    NonTerminatedString cmd;
     char** argv;
 } execStruct;
 
 char* readLine(char *str);
-int isBuiltinCommand(commands *cmd);
+int isBuiltinCommand(NonTerminatedString *cmd);
 void clearWordBuffer(char *word, int pos);
-void insertNewArg(commands *cmd, char *word, int pos);
+void insertNewArg(NonTerminatedString *cmd, char *word, int pos);
 void parseArg(char *str, cmdline *cmd);
 void parse(char *str);
