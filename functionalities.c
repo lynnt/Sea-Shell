@@ -12,10 +12,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <limits.h> /* include PATH_MAX */
-
-#define MAX_LEN 1024
-#define LEFT 1
-#define RIGHT 2
+#include "common.h" /* Contains common structs */
 
 void errAndExit(const char* msg) {
     perror(msg);
@@ -56,8 +53,9 @@ void cd(char* path) {
     }
 }
 
-void executingProgram(const char* command, char** const argv) {
+void executingProgram(cmdline cmd) {
     /* Executing other programs like ls/cd/etc.. */
+    /*
     pid_t childPID;
     int status;
 
@@ -76,6 +74,7 @@ void executingProgram(const char* command, char** const argv) {
     else {
         errAndExit("Can't get to the child process");
     }
+    */
 }
 
 void redirection(char* file, int direction, char** argv) {
