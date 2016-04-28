@@ -76,7 +76,7 @@ void executeProgram(char* command, char** argv) {
 
 void execute(cmdline cmd) {
     /* Executing other programs like ls/cd/etc.. */
-    if (!redirect) {
+    if (redirect == 0) {
         // executeProgram();
     }
     else {
@@ -84,7 +84,7 @@ void execute(cmdline cmd) {
     }
 }
 
-void redirection(char* file, int direction, char** argv) {
+void redirection(char* file, Direction direction, char** argv) {
     if (!file) {
         errMsg("There is no file");
         return;

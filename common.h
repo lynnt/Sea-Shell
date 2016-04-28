@@ -2,9 +2,12 @@
 
 #define MAX_LEN 1024
 #define ARG_NUM 4
-#define LEFT 1
-#define RIGHT 2
 #define MAX_COMMANDS 100
+
+typedef enum Direction {
+    LEFT,
+    RIGHT
+} Direction;
 
 const char* list[] = {"cd", "help", "exit", "pwd"};
 int redirect = 0;
