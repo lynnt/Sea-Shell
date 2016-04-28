@@ -27,23 +27,27 @@ char* readLine(char* str) {
     return str;
 }
 
-int isBuiltinCommand(NonTerminatedString* cmd) {
+int isBuiltinCommand(const cmdline cmd) {
+    NonTerminatedString firstArg = cmd.cmd[0];
     /* Command cd */
-    if (strcmp(cmd->str, list[0]) == 0) {
-        cd(cmd->str);
+    if (strcmp(firstArg.str, list[0]) == 0) {
+        assert(*cmd.cmd[1].str);
+
+        cd(cmd.cmd[1].str);
+
         return 1;
     }
     /* Command help */
-    else if (strcmp(cmd->str, list[1]) == 0) {
+    else if (strcmp(firstArg.str, list[1]) == 0) {
         help();
         return 1;
     }
     /* Command exit */
-    else if (strcmp(cmd->str, list[2]) == 0) {
+    else if (strcmp(firstArg.str, list[2]) == 0) {
         exit(0);
     }
     /* Command pwd */
-    else if (strcmp(cmd->str, list[3]) == 0) {
+    else if (strcmp(firstArg.str, list[3]) == 0) {
         pwd();
         return 1;
     }
@@ -152,6 +156,6 @@ void parse(char* str) {
     cmdline cmd;
     parseArg(str, &cmd);
 
-    if (isBuiltinCommand(&cmd.cmd[0]) == 0) {
+    if (isBuiltinCommand(cmd) == 0) {
     }
 }

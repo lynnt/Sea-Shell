@@ -47,7 +47,7 @@ void changePath(char* path) {
 }
 
 void cd(char* path) {
-    if (*path) {
+    if (!*path) {
         errMsg("Currently not supported");
         return;
     }

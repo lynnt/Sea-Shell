@@ -11,6 +11,7 @@
 
 char delimiters[] = {'>', '<', '&', '|'};
 const char* list[] = {"cd", "help", "exit", "pwd"};
+int redirect = 0;
 
 typedef struct NonTerminatedString {
     char* str;
@@ -29,7 +30,7 @@ typedef struct redirectCmd {
 } redirectCmd;
 
 typedef struct cdStruct {
-    NonTerminatedString cmd;
+    NonTerminatedString path;
 } cdStruct;
 
 typedef struct execStruct {
@@ -38,7 +39,7 @@ typedef struct execStruct {
 } execStruct;
 
 char* readLine(char *str);
-int isBuiltinCommand(NonTerminatedString *cmd);
+int isBuiltinCommand(const cmdline cmd);
 void clearWordBuffer(char *word, int pos);
 void insertNewArg(NonTerminatedString *cmd, char *word, int pos);
 void parseArg(char *str, cmdline *cmd);
