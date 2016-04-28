@@ -21,7 +21,12 @@ int main (int argc, char** argv) {
         line = readLine(line);
 
         if (line != NULL) {
-            parse(line);
+            cmdline cmd;
+            parse(line, &cmd);
+
+            if (isBuiltinCommand(cmd) == 0) {
+                execute(cmd);
+            }
         }
     }
     return 0;

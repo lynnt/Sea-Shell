@@ -75,7 +75,7 @@ void insertNewArg(NonTerminatedString* cmd, char* word, int pos) {
 /*
  * Parse an argument from a line of commands.
  */
-void parseArg(char* str, cmdline *cmd) {
+void parse(char* str, cmdline *cmd) {
     assert(*str);
 
     char *curr = (char*) malloc(MAX_LEN+1);
@@ -147,16 +147,4 @@ void parseArg(char* str, cmdline *cmd) {
     }
 
     free(word);
-}
-
-/*
- * Initialize parser
- */
-void parse(char* str) {
-    cmdline cmd;
-    parseArg(str, &cmd);
-
-    if (isBuiltinCommand(cmd) == 0) {
-        execute(cmd);
-    }
 }

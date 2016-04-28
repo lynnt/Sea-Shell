@@ -7,5 +7,4 @@ char* readLine(char *str);
 int isBuiltinCommand(const cmdline cmd);
 void clearWordBuffer(char *word, int pos);
 void insertNewArg(NonTerminatedString *cmd, char *word, int pos);
-void parseArg(char *str, cmdline *cmd);
-void parse(char *str);
+void parse(char *str, cmdline *cmd);
