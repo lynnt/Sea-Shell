@@ -157,6 +157,6 @@ void parse(char* str) {
     parseArg(str, &cmd);
 
     if (isBuiltinCommand(cmd) == 0) {
-        executingProgram(cmd);
+        execute(cmd);
     }
 }

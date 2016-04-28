@@ -53,9 +53,7 @@ void cd(char* path) {
     }
 }
 
-void executingProgram(cmdline cmd) {
-    /* Executing other programs like ls/cd/etc.. */
-    /*
+void executeProgram(char* command, char** argv) {
     pid_t childPID;
     int status;
 
@@ -74,11 +72,20 @@ void executingProgram(cmdline cmd) {
     else {
         errAndExit("Can't get to the child process");
     }
-    */
+}
+
+void execute(cmdline cmd) {
+    /* Executing other programs like ls/cd/etc.. */
+    if (!redirect) {
+        // executeProgram();
+    }
+    else {
+        // redirection(file, direction, argv);
+    }
 }
 
 void redirection(char* file, int direction, char** argv) {
-    if (file) {
+    if (!file) {
         errMsg("There is no file");
         return;
     }
@@ -98,6 +105,7 @@ void redirection(char* file, int direction, char** argv) {
         }
 
         /* execute the command */
+        //executeProgram();
 
         close(fileDescriptor);
     }
@@ -116,6 +124,7 @@ void redirection(char* file, int direction, char** argv) {
         }
 
         /* execute the command */
+        //executeProgram();
 
         close(fileDescriptor);
     }
