@@ -4,10 +4,10 @@ CFLAGS=-g -Wall -pedantic
 
 NAME = seashell
 OBJ = ${NAME}.o
-FILE = ${NAME}.c
+SRC = ${NAME}.c
 
 shell:
-	$(CC) $(CFLAGS) -o $(OBJ) $(FILE)
+	$(CC) $(CFLAGS) -o $(OBJ) $(SRC)
 
 parser:
 	$(CC) $(CFLAGS) -o parser.o parser.c
